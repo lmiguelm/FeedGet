@@ -1,9 +1,5 @@
-function App() {
-  return (
-    <div>
-      <h1>FeedGet</h1>
-    </div>
-  );
-}
+import { Widget } from './components/Widget';
 
-export default App;
+export function App() {
+  return <Widget />;
+}
