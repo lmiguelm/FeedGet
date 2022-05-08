@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    command: yarn start:dev
+    ports:
+      - 3333:3333
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      - database
+    volumes:
+      - .:/usr/app/
+
+  database:
+    image: 'bitnami/postgresql'
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRESQL_USERNAME=postgresql
+      - POSTGRESQL_PASSWORD=postgresql
+      - POSTGRESQL_DATABASE=feedget
+    volumes:
+      - 'postgresql_data:/bitnami/postgresql'
+volumes:
+  postgresql_data:
+    driver: local
