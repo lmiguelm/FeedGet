@@ -4,6 +4,7 @@ import { FormEvent, useState } from 'react';
 import { FeedbackType, feedbackTypes } from '..';
 import { api } from '../../../lib/api';
 import { CloseButton } from '../../CloseButton';
+import { Loading } from '../../Loading';
 import { ScreenshotButton } from '../ScreenshotButton';
 
 interface FeedbackContentStepParams {
@@ -19,10 +20,12 @@ export function FeedbackContentStep({
 }: FeedbackContentStepParams) {
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const feedback = feedbackTypes[feedbackType];
 
   async function handleSubmit(event: FormEvent) {
+    setLoading(true);
     event.preventDefault();
 
     try {
@@ -34,6 +37,8 @@ export function FeedbackContentStep({
       onFeedbackSent();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -70,10 +75,10 @@ export function FeedbackContentStep({
 
           <button
             type="submit"
-            disabled={comment.trim().length === 0}
+            disabled={comment.trim().length === 0 || loading}
             className="p-2 bg-brand-500 rounded-md border-transparent flex-1 justify-center items-center text-sm hover:bg-brand-300 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-brand-500"
           >
-            Enviar feedback
+            {loading ? <Loading /> : 'Enviar feedback'}
           </button>
         </footer>
       </form>
